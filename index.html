@@ -1,18 +1,40 @@
-<!-- index.html -->
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>معرض اللؤلؤة للسيارات</title>
+    <link rel="manifest" href="manifest.json">
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
     <link rel="stylesheet" href="style.css" />
 </head>
 <body>
+    <div id="passwordOverlay" class="fullscreen-overlay">
+        <div class="auth-box">
+            <input type="password" id="systemPassword" placeholder="كلمة المرور">
+            <button onclick="checkPassword()" class="btn-primary">دخول</button>
+        </div>
+    </div>
+
+    <div id="installOverlay" class="fullscreen-overlay" style="display: none;">
+        <div class="auth-box">
+            <h3>هل ترغب في تثبيت النظام كتطبيق؟</h3>
+            <div style="margin-top: 15px; display: flex; gap: 10px; justify-content: center;">
+                <button id="installBtn" class="btn-success">تثبيت التطبيق</button>
+                <button onclick="skipInstall()" class="btn-danger">تخطي</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="lightboxModal" class="lightbox" onclick="closeLightbox()">
+        <span class="close-lightbox" onclick="closeLightbox()">&times;</span>
+        <img class="lightbox-content" id="lightboxImage">
+    </div>
+
     <div class="background-shapes no-print"></div>
 
-    <div class="glass-container no-print">
+    <div class="glass-container no-print" id="mainAppContainer" style="display: none;">
         <header>
             <h1><i class="fa-solid fa-car"></i> نظام إدارة معرض اللؤلؤة</h1>
             <nav class="tabs">
@@ -42,12 +64,24 @@
         <div class="modal-content">
             <div class="form-actions no-print">
                 <button class="btn-danger" onclick="closeFormModal()"><i class="fa-solid fa-times"></i> إغلاق</button>
+                
+                <label class="btn-primary" style="cursor: pointer;">
+                    <i class="fa-solid fa-camera"></i> إرفاق صورة
+                    <input type="file" id="imageUpload" accept="image/*" capture="environment" style="display: none;" onchange="previewSelectedImage(event)">
+                </label>
+                
                 <button class="btn-success" onclick="saveTransaction()"><i class="fa-solid fa-save"></i> حفظ الاستمارة</button>
                 <button class="btn-info" onclick="window.print()"><i class="fa-solid fa-print"></i> طباعة العقد</button>
             </div>
 
+            <div id="imagePreviewContainer" class="no-print" style="display: none; text-align: center; margin-bottom: 10px;">
+                <img id="imagePreview" style="max-height: 100px; border-radius: 8px; border: 2px solid #ddd;" onclick="openLightbox(this.src)">
+            </div>
+
             <div class="contract-paper" id="contractForm">
                 <input type="hidden" id="transactionId">
+                <input type="hidden" id="savedImageUrl">
+                <input type="hidden" id="savedDeleteUrl">
                 
                 <div class="c-header">
                     <div class="ch-bg-shape"></div>
@@ -185,6 +219,14 @@
         </div>
     </div>
 
-    <script src="script.js"></script>
+    <script type="module" src="script.js"></script>
+    <script>
+        // تسجيل الـ Service Worker لعمل النظام Offline
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js').catch(err => console.log('SW failed', err));
+            });
+        }
+    </script>
 </body>
 </html>
