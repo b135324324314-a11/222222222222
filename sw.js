@@ -1,15 +1,15 @@
 // sw.js
-const CACHE_NAME = 'loloa-system-cache-v1';
+const CACHE_NAME = 'loloa-system-cache-v2';
 
-// الملفات الأساسية التي سيتم حفظها لتعمل بدون إنترنت
+// الملفات الأساسية التي سيتم حفظها لتعمل بدون إنترنت (معدلة لتعمل مع GitHub)
 const urlsToCache = [
-  '/',
-  '/index.html',
-  '/style.css',
-  '/script.js',
-  '/icon-left.png',
-  '/icon-right.png',
-  '/manifest.json'
+  './',
+  './index.html',
+  './style.css',
+  './script.js',
+  './icon-left.png',
+  './icon-right.png',
+  './manifest.json'
 ];
 
 // 1. حدث التثبيت: حفظ الملفات في الكاش عند أول تشغيل
@@ -56,7 +56,6 @@ self.addEventListener('fetch', event => {
         }
         // إذا لم يجده، يجلبه من الإنترنت
         return fetch(event.request).catch(() => {
-            // يمكن إضافة صفحة خطأ هنا في حال فشل الجلب
             console.log('أنت غير متصل بالإنترنت والملف غير متوفر في الكاش');
         });
       })
