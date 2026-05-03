@@ -2,7 +2,7 @@
   "name": "نظام إدارة معرض اللؤلؤة",
   "short_name": "اللؤلؤة",
   "description": "نظام إدارة وتوثيق عقود بيع وشراء السيارات",
-  "start_url": "/index.html",
+  "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#1e3c72",
   "theme_color": "#1e3c72",
